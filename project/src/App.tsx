@@ -73,7 +73,7 @@ const App = () => {
   
     try {
       const response = await fetchWithRetry(
-        "http://localhost:5000/api/web3data",
+        "https://web3-study-platform.onrender.com/api/web3data",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -139,7 +139,7 @@ const App = () => {
       setEntries([]); 
       
       const response = await fetchWithRetry(
-        "http://localhost:5000/api/web3data",
+        "https://web3-study-platform.onrender.com/api/web3data",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
