@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { BookOpen, Clock, ArrowRight } from 'lucide-react';
 
 interface BlogEntry {
   id: string;
@@ -19,14 +20,14 @@ const App = () => {
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-  // Rest of the fetchWithRetry function remains the same...
 
   const cleanFormatting = (text: string): string => {
     return text
-      .replace(/\*\*/g, '') // Remove **
-      .replace(/\*/g, '')
-      .replace('*','').replace('**','')   // Remove single *
-      .trim();
+    .replace(/\*\*.*?\*\*/g, '') 
+    .replace(/\*.*?\*/g, '')    
+    .replace(/\*/g, '')        
+    .replace(/#{1,3}\s/g, '')   
+    .trim();
   };
 
   const fetchWithRetry = async (
@@ -201,76 +202,106 @@ const App = () => {
   }, []); 
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <nav className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16 items-center">
+            <div className="flex items-center">
+              <BookOpen className="h-8 w-8 text-blue-600" />
+              <span className="ml-2 text-xl font-semibold">Web3 Learning Hub</span>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <main className="max-w-4xl mx-auto px-4 py-12">
         <header className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-6xl font-bold text-gray-900 mb-6 leading-tight">
             Web3 Insights
           </h1>
-          <p className="text-xl text-gray-600">
-            Exploring blockchain concepts through stories
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Master blockchain concepts through practical examples and engaging stories
           </p>
         </header>
 
         {loading && (
-          <div className="text-center mb-8">
-            <div className="mb-4">
-              <div className="h-2 bg-gray-200 rounded-full max-w-md mx-auto">
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-lg font-medium text-gray-900">Loading Progress</div>
+                <div className="text-sm text-gray-500">
+                  {progress.current} of {progress.total} articles
+                </div>
+              </div>
+              <div className="h-2 bg-gray-200 rounded-full">
                 <div
-                  className="h-2 bg-blue-600 rounded-full transition-all duration-500"
+                  className="h-2 bg-blue-600 rounded-full transition-all duration-500 ease-in-out"
                   style={{ width: `${(progress.current / progress.total) * 100}%` }}
                 />
               </div>
             </div>
-            <p className="text-gray-600">
-              Loading article {progress.current} of {progress.total}
-            </p>
           </div>
         )}
 
         {error && (
-          <div className="text-red-600 text-center mb-8">
-            {error}
+          <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-8 rounded">
+            <div className="flex">
+              <div className="ml-3">
+                <p className="text-red-700">{error}</p>
+              </div>
+            </div>
           </div>
         )}
 
-        <div className="space-y-16">
+        <div className="space-y-12">
           {entries.map((entry) => (
             <article
               key={entry.id}
-              className="bg-white rounded-2xl shadow-sm p-8 space-y-8"
+              className="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl"
             >
-              <header className="border-b pb-4">
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                  {entry.topic}
-                </h2>
-                <time className="text-gray-500">
-                  {new Date(entry.timestamp).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </time>
-              </header>
+              <div className="p-8">
+                <header className="mb-8">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-3xl font-bold text-gray-900">
+                      {entry.topic}
+                    </h2>
+                    <div className="flex items-center text-gray-500">
+                      <Clock className="h-4 w-4 mr-2" />
+                      <time>
+                        {new Date(entry.timestamp).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
+                      </time>
+                    </div>
+                  </div>
+                </header>
 
-              <div className="prose prose-lg max-w-none">
-                <div className="space-y-4">
-                  {formatContent(entry.content)}
+                <div className="prose prose-lg max-w-none">
+                  <div className="space-y-6">
+                    {formatContent(entry.content)}
+                  </div>
                 </div>
-              </div>
 
-              <div className="mt-8 p-6 bg-blue-50 rounded-xl">
-                <h3 className="text-2xl font-semibold text-gray-900 mb-4">
-                  A Story to Remember
-                </h3>
-                <div className="space-y-4">
-                  {formatContent(entry.story)}
+                <div className="mt-8">
+                  <div className="bg-blue-50 rounded-xl p-8">
+                    <div className="flex items-center mb-4">
+                      <h3 className="text-2xl font-semibold text-gray-900">
+                        Real-World Application
+                      </h3>
+                      <ArrowRight className="ml-2 h-5 w-5 text-blue-600" />
+                    </div>
+                    <div className="space-y-4">
+                      {formatContent(entry.story)}
+                    </div>
+                  </div>
                 </div>
               </div>
             </article>
           ))}
         </div>
-      </div>
+      </main>
     </div>
   );
 };
