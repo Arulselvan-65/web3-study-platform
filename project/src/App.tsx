@@ -70,7 +70,7 @@ const App = () => {
       Write naturally, like explaining to a friend.
     `;
 
-    // Rest of the fetchBlogContent function remains the same...
+  
     try {
       const response = await fetchWithRetry(
         "http://localhost:5000/api/web3data",
