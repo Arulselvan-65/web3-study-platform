@@ -25,7 +25,8 @@ const App = () => {
     return text
     .replace(/\*\*.*?\*\*/g, '')  
     .replace(/\*.*?\*/g, '')      
-    .replace(/\*+/g, '')         
+    .replace(/\*+/g, '')  
+    .replace(/\*/g, '')
     .replace(/#{1,3}\s/g, '')    
     .trim();
 
@@ -135,6 +136,7 @@ const App = () => {
   };
 
   const fetchAllContent = async () => {
+    localStorage.clear();
     try {
       setLoading(true);
       setError(null);
@@ -198,6 +200,7 @@ const App = () => {
       } catch (e) {
         }
     } else {
+        localStorage.clear();
         fetchAllContent();
       }
   }, []); 
