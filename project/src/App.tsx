@@ -9,7 +9,7 @@ interface BlogEntry {
   timestamp: number;
 }
 
-const DELAY_BETWEEN_REQUESTS = 30000;
+const DELAY_BETWEEN_REQUESTS = 10000;
 
 const App = () => {
   const [entries, setEntries] = useState<BlogEntry[]>([]);
@@ -23,11 +23,12 @@ const App = () => {
 
   const cleanFormatting = (text: string): string => {
     return text
-    .replace(/\*\*.*?\*\*/g, '') 
-    .replace(/\*.*?\*/g, '')    
-    .replace(/\*/g, '')        
-    .replace(/#{1,3}\s/g, '')   
+    .replace(/\*\*.*?\*\*/g, '')  
+    .replace(/\*.*?\*/g, '')      
+    .replace(/\*+/g, '')         
+    .replace(/#{1,3}\s/g, '')    
     .trim();
+
   };
 
   const fetchWithRetry = async (
