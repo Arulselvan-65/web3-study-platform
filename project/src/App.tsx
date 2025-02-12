@@ -108,7 +108,6 @@ const App = () => {
   const formatContent = (text: string) => {
     const paragraphs = text.split('\n\n');
     return paragraphs.map((paragraph, index) => {
-      // Handle main titles (# Title)
       if (paragraph.startsWith('# ')) {
         return (
           <h1 key={index} className="text-4xl font-bold text-gray-900 mb-6 mt-8 border-b pb-4">
@@ -116,8 +115,7 @@ const App = () => {
           </h1>
         );
       }
-      
-      // Handle subtitles (## or ### Title)
+
       if (paragraph.startsWith('## ') || paragraph.startsWith('### ')) {
         return (
           <h2 key={index} className="text-2xl font-semibold text-gray-800 mb-4 mt-6">
@@ -126,7 +124,6 @@ const App = () => {
         );
       }
       
-      // Handle regular paragraphs
       return (
         <p key={index} className="text-gray-700 leading-relaxed mb-4">
           {cleanFormatting(paragraph)}
@@ -136,11 +133,10 @@ const App = () => {
   };
 
   const fetchAllContent = async () => {
-    await sleep(DELAY_BETWEEN_REQUESTS);
     try {
       setLoading(true);
       setError(null);
-      setEntries([]); // Clear existing entries
+      setEntries([]); 
       
       const response = await fetchWithRetry(
         "http://localhost:5000/api/web3data",
@@ -198,16 +194,11 @@ const App = () => {
         setEntries(parsedData);
         setLoading(false);
       } catch (e) {
+        }
+    } else {
         fetchAllContent();
       }
-    } else {
-      fetchAllContent();
-    }
-    // Cleanup function to prevent memory leaks
-    return () => {
-      fetchInProgress.current = false;
-    };
-  }, []); // Empty dependency array to run only once
+  }, []); 
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">

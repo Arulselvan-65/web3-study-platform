@@ -25,7 +25,7 @@ app.post('/api/web3data', async (req, res) => {
                 },
             }
         );
-        res.json(response.data);
+        res.json(data);
     } catch (error) {
         console.log(error);
         res.status(error.response?.status || 500).json({ 
