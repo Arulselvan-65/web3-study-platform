@@ -136,7 +136,6 @@ const App = () => {
   };
 
   const fetchAllContent = async () => {
-    localStorage.clear();
     try {
       setLoading(true);
       setError(null);
@@ -179,7 +178,8 @@ const App = () => {
         await sleep(DELAY_BETWEEN_REQUESTS);
       }
 
-      localStorage.setItem('web3Blog', JSON.stringify(entries));
+
+      
 
     } catch (err) {
       console.error('Error in fetchAllContent:', err);
@@ -191,19 +191,9 @@ const App = () => {
   };
 
   useEffect(() => {
-    const storedData = localStorage.getItem('web3Blog');
-    if (storedData) {
-      try {
-        const parsedData = JSON.parse(storedData);
-        setEntries(parsedData);
-        setLoading(false);
-      } catch (e) {
-        }
-    } else {
-        localStorage.clear();
         fetchAllContent();
       }
-  }, []); 
+  , []); 
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
